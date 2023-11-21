@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"testing"
 
+	goerrors "github.com/go-errors/errors"
 	"github.com/joomcode/errorx"
 
 	"github.com/matchsystems/werr"
@@ -40,6 +41,13 @@ func BenchmarkErrorxError10(b *testing.B) {
 	consumeResult(errSink)
 }
 
+func BenchmarkGoErrorsError10(b *testing.B) {
+	for n := 0; n < b.N; n++ {
+		errSink = function0(10, createGoErrorsError)
+	}
+	consumeResult(errSink)
+}
+
 func BenchmarkSimpleError100(b *testing.B) {
 	for n := 0; n < b.N; n++ {
 		errSink = function0(100, createSimpleError)
@@ -64,6 +72,13 @@ func BenchmarkWrapMsgError100(b *testing.B) {
 func BenchmarkErrorxError100(b *testing.B) {
 	for n := 0; n < b.N; n++ {
 		errSink = function0(100, createErrorxError)
+	}
+	consumeResult(errSink)
+}
+
+func BenchmarkGoErrorsError100(b *testing.B) {
+	for n := 0; n < b.N; n++ {
+		errSink = function0(100, createGoErrorsError)
 	}
 	consumeResult(errSink)
 }
@@ -104,6 +119,15 @@ func BenchmarkErrorxErrorPrint100(b *testing.B) {
 	consumeResult(errSink)
 }
 
+func BenchmarkGoErrorsErrorPrint100(b *testing.B) {
+	for n := 0; n < b.N; n++ {
+		err := function0(100, createGoErrorsError)
+		emulateErrorPrint(err)
+		errSink = err
+	}
+	consumeResult(errSink)
+}
+
 func createSimpleError() error {
 	return errors.New("benchmark")
 }
@@ -120,6 +144,10 @@ var ErrorX = errorx.NewNamespace("errorx.benchmark").NewType("stack_trace")
 
 func createErrorxError() error {
 	return ErrorX.New("benchmark")
+}
+
+func createGoErrorsError() error {
+	return goerrors.New("benchmark")
 }
 
 func function0(depth int, generate func() error) error {

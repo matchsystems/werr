@@ -118,22 +118,25 @@ an error.
 
 Result sample, MacBook Air M1 @ 3.2GHz:
 
-| name                          |     runs | ns/op | note                                         |
-|-------------------------------|---------:|------:|----------------------------------------------|
-| BenchmarkSimpleError10        | 37410418 | 28.29 | simple error, 10 frames deep                 |
-| BenchmarkWrapError10          |  1919391 | 621.7 | same with wrap error                         |
-| BenchmarkWrapMsgError10       |  1782106 | 672.8 | same with message                            |
-| BenchmarkErrorxError10        |   967269 |  1260 | errorx library, same frames                  |
-|                               |          |       |                                              |
-| BenchmarkSimpleError100       |  1897574 | 631.7 | simple error, 100 frames deep                |
-| BenchmarkWrapError100         |   909345 |  1259 | same with wrap error                         |
-| BenchmarkWrapMsgError100      |   867218 |  1310 | same with message                            |
-| BenchmarkErrorxError100       |   309862 |  3855 | errorx library, same frames                  |
-|                               |          |       |                                              |
-| BenchmarkSimpleErrorPrint100  |  1721605 | 697.2 | simple error, 100 frames deep, format output |
-| BenchmarkWrapErrorPrint100    |   759574 |  1482 | same with wrap error                         |
-| BenchmarkWrapMsgErrorPrint100 |   715376 |  1555 | same with  message                           |
-| BenchmarkErrorxErrorPrint100  |    37346 | 32493 | errorx library, same frames                  |
+| name                           |     runs | ns/op | note                                         |
+|--------------------------------|---------:|------:|----------------------------------------------|
+| BenchmarkSimpleError10         | 37410418 | 28.29 | simple error, 10 frames deep                 |
+| BenchmarkWrapError10           |  1919391 | 621.7 | same with wrap error                         |
+| BenchmarkWrapMsgError10        |  1782106 | 672.8 | same with message                            |
+| BenchmarkErrorxError10         |   967269 |  1260 | errorx library, same frames                  |
+| BenchmarkGoErrorsError10       |   777688 |  1306 | go-errors library, same frames               |
+|                                |          |       |                                              |
+| BenchmarkSimpleError100        |  1897574 | 631.7 | simple error, 100 frames deep                |
+| BenchmarkWrapError100          |   909345 |  1259 | same with wrap error                         |
+| BenchmarkWrapMsgError100       |   867218 |  1310 | same with message                            |
+| BenchmarkErrorxError100        |   309862 |  3855 | errorx library, same frames                  |
+| BenchmarGoErrorsError100       |   520958 |  2248 | go-errors library, same frames               |
+|                                |          |       |                                              |
+| BenchmarkSimpleErrorPrint100   |  1721605 | 697.2 | simple error, 100 frames deep, format output |
+| BenchmarkWrapErrorPrint100     |   759574 |  1482 | same with wrap error                         |
+| BenchmarkWrapMsgErrorPrint100  |   715376 |  1555 | same with  message                           |
+| BenchmarkErrorxErrorPrint100   |    37346 | 32493 | errorx library, same frames                  |
+| BenchmarkGoErrorsErrorPrint100 |   493110 |  2392 | go-errors library, same frames               |
 
 Key takeaways:
 
