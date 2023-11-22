@@ -2,10 +2,7 @@ module github.com/matchsystems/werr
 
 go 1.21.4
 
-require (
-	github.com/joomcode/errorx v1.1.1
-	github.com/stretchr/testify v1.8.4
-)
+require github.com/stretchr/testify v1.8.4
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
