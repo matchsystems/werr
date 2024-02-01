@@ -76,6 +76,17 @@ func TestUnwrap(t *testing.T) {
 		require.EqualError(t, err2, Unwrap(err4).Error())
 	})
 
+	t.Run("unwrap all", func(t *testing.T) {
+		t.Parallel()
+
+		err1 := errors.New("original error")
+		err2 := fmt.Errorf("fmt wrap: %w", err1)
+		err3 := Wrap(err2)
+		err4 := Wrap(err3)
+
+		require.EqualError(t, err1, UnwrapAll(err4).Error())
+	})
+
 	t.Run("nested trace", func(t *testing.T) {
 		t.Parallel()
 
