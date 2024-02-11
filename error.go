@@ -42,7 +42,7 @@ func Unwrap(err error) error {
 // UnwrapAll recursively traverses the wrapped errors and returns the innermost non-wrapped error.
 // If the input error (err) is not a wrapped error, it is returned unchanged.
 func UnwrapAll(err error) error {
-	u, ok := err.(UnwrapErr) //nolint:errorlint
+	u, ok := err.(UnwrapErr) //nolint:errorlint // unwrap
 	if ok {
 		return UnwrapAll(u.Unwrap())
 	}
