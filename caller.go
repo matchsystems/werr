@@ -3,13 +3,12 @@ package werr
 import (
 	"path"
 	"runtime"
-	"strconv"
 	"strings"
 )
 
 const defaultCallerSkip = 3
 
-func caller(skip int) (string, string) {
+func caller(skip int) (string, string, int) {
 	// make caller func invisible
 	if skip < 1 {
 		skip = 1
@@ -17,16 +16,16 @@ func caller(skip int) (string, string) {
 
 	pc, file, line, ok := runtime.Caller(skip)
 	if !ok {
-		return "", ""
+		return "", "", -1
 	}
 
 	fnName := runtime.FuncForPC(pc).Name()
 	ix := strings.LastIndex(fnName, ".")
-	sourceCaller := fnName[0:ix] + "/" + path.Base(file) + ":" + strconv.Itoa(line)
+	sourceCaller := fnName[0:ix] + "/" + path.Base(file)
 
 	if len(fnName) > ix {
-		return sourceCaller, fnName[ix+1:] + "()"
+		return sourceCaller, fnName[ix+1:] + "()", line
 	}
 
-	return sourceCaller, ""
+	return sourceCaller, "", line
 }

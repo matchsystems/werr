@@ -26,7 +26,7 @@ func TestWrapError_Error(t *testing.T) {
 			msg:      "additional message",
 		}
 
-		expected := "caller\tfunction\tadditional message\noriginal error"
+		expected := "caller:0\tfunction\tadditional message\noriginal error"
 		require.Equal(t, expected, wrappedErr.Error())
 	})
 
@@ -45,7 +45,7 @@ func TestWrapError_Error(t *testing.T) {
 			msg:      "additional message",
 		}
 
-		expected := "caller\tfunction\tadditional message\nsubCaller\tsubFunction\noriginal error"
+		expected := "caller:0\tfunction\tadditional message\nsubCaller:0\tsubFunction\noriginal error"
 		require.Equal(t, expected, wrappedErr.Error())
 	})
 
@@ -57,7 +57,7 @@ func TestWrapError_Error(t *testing.T) {
 			funcName: "function",
 		}
 
-		expected := "caller\tfunction\noriginal error"
+		expected := "caller:0\tfunction\noriginal error"
 		require.Equal(t, expected, wrappedErr.Error())
 	})
 }

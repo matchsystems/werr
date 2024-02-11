@@ -4,8 +4,9 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/matchsystems/werr"
 	"github.com/stretchr/testify/require"
+
+	"github.com/matchsystems/werr"
 )
 
 func TestDefaultErrorStackMarshaler(t *testing.T) {
@@ -15,11 +16,13 @@ func TestDefaultErrorStackMarshaler(t *testing.T) {
 	err := errors.New("example error")
 	funcName := "TestFunction"
 	msg := "custom message"
+	line := 123
 
-	result := werr.DefaultErrorStackMarshaler(caller, err, funcName, msg)
+	result := werr.DefaultErrorStackMarshaler(err, caller, funcName, msg, line)
 
 	require.Contains(t, result, caller)
 	require.Contains(t, result, funcName)
 	require.Contains(t, result, msg)
 	require.Contains(t, result, err.Error())
+	require.Contains(t, result, "123")
 }

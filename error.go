@@ -15,16 +15,18 @@ type wrapError struct {
 	err      error
 	funcName string
 	msg      string
+	line     int
 }
 
 func newError(err error, msg string) error {
-	sourceCaller, funcName := caller(defaultCallerSkip)
+	sourceCaller, funcName, line := caller(defaultCallerSkip)
 
 	return wrapError{
 		caller:   sourceCaller,
 		err:      err,
 		msg:      msg,
 		funcName: funcName,
+		line:     line,
 	}
 }
 
@@ -51,7 +53,7 @@ func UnwrapAll(err error) error {
 }
 
 func (e wrapError) Error() string {
-	return ErrorStackMarshaler(e.caller, e.err, e.funcName, e.msg)
+	return ErrorStackMarshaler(e.err, e.caller, e.funcName, e.msg, e.line)
 }
 
 func (e wrapError) Unwrap() error {
