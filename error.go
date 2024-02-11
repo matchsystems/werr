@@ -51,11 +51,7 @@ func UnwrapAll(err error) error {
 }
 
 func (e wrapError) Error() string {
-	if e.msg != "" {
-		e.msg = "\t" + e.msg
-	}
-
-	return e.caller + "\t" + e.funcName + e.msg + "\n" + e.err.Error()
+	return ErrorStackMarshaler(e.caller, e.err, e.funcName, e.msg)
 }
 
 func (e wrapError) Unwrap() error {
