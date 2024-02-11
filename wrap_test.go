@@ -30,11 +30,11 @@ func TestWrap(t *testing.T) {
 
 	t.Run("check skip count is sufficient", func(t *testing.T) {
 		t.Parallel()
-		originalErr := errors.New("original error")
-		wrappedErr := Wrap(originalErr)
+		wrappedErr := Wrap(errors.New("original error"))
 
 		// Ensure the skip count 3 is enough
-		require.Equal(t, "github.com/matchsystems/werr.TestWrap/wrap_test.go:34\tfunc3()\noriginal error", wrappedErr.Error())
+		require.Equal(t, `original error
+werr/wrap_test.go:33#TestWrap.func3`, wrappedErr.Error())
 	})
 }
 

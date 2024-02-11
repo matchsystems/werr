@@ -1,7 +1,9 @@
 package werr
 
 import (
-	"strconv"
+	"strings"
+
+	"gitlab.com/matchsystems-golang/stacktrace"
 )
 
 //nolint:gochecknoglobals // for custom setting
@@ -10,12 +12,20 @@ var (
 	ErrorStackMarshaler ErrorStackMarshalerFn = DefaultErrorStackMarshaler
 )
 
-type ErrorStackMarshalerFn func(err error, caller, funcName, msg string, line int) string
+type ErrorStackMarshalerFn func(err error, msg string, frames stacktrace.Frames) string
 
-func DefaultErrorStackMarshaler(err error, caller, funcName, msg string, line int) string {
-	if msg != "" {
-		msg = "\t" + msg
+func DefaultErrorStackMarshaler(err error, msg string, frames stacktrace.Frames) string {
+	var result string
+
+	if len(msg) > 0 {
+		result = msg + "\n"
 	}
 
-	return caller + ":" + strconv.Itoa(line) + "\t" + funcName + msg + "\n" + err.Error()
+	result = result + err.Error()
+
+	if len(frames) > 0 {
+		result = result + "\n" + strings.Join(frames.Pretty(), "\n")
+	}
+
+	return result
 }

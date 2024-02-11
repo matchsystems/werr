@@ -2,6 +2,8 @@ package werr
 
 import (
 	"errors"
+
+	"gitlab.com/matchsystems-golang/stacktrace"
 )
 
 type UnwrapErr interface {
@@ -11,22 +13,18 @@ type UnwrapErr interface {
 var _ UnwrapErr = (*wrapError)(nil)
 
 type wrapError struct {
-	caller   string
-	err      error
-	funcName string
-	msg      string
-	line     int
+	err    error
+	msg    string
+	frames stacktrace.Frames
 }
 
-func newError(err error, msg string) error {
-	sourceCaller, funcName, line := caller(defaultCallerSkip)
+const defaultCallerSkip = 4
 
+func newError(err error, msg string) error {
 	return wrapError{
-		caller:   sourceCaller,
-		err:      err,
-		msg:      msg,
-		funcName: funcName,
-		line:     line,
+		err:    err,
+		msg:    msg,
+		frames: stacktrace.GetStacktrace(defaultCallerSkip, 1),
 	}
 }
 
@@ -53,7 +51,11 @@ func UnwrapAll(err error) error {
 }
 
 func (e wrapError) Error() string {
-	return ErrorStackMarshaler(e.err, e.caller, e.funcName, e.msg, e.line)
+	return ErrorStackMarshaler(
+		e.err,
+		e.msg,
+		e.frames,
+	)
 }
 
 func (e wrapError) Unwrap() error {
