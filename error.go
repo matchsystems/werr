@@ -3,7 +3,7 @@ package werr
 import (
 	"errors"
 
-	"gitlab.com/matchsystems-golang/stacktrace"
+	"github.com/matchsystems/stacktrace"
 )
 
 type UnwrapErr interface {
@@ -21,10 +21,16 @@ type wrapError struct {
 const defaultCallerSkip = 4
 
 func newError(err error, msg string) error {
+	frames := stacktrace.GetStacktrace(defaultCallerSkip, 1)
+	var wErr wrapError
+	if errors.As(err, &wErr) {
+		frames = append(frames, wErr.frames...)
+	}
+
 	return wrapError{
 		err:    err,
 		msg:    msg,
-		frames: stacktrace.GetStacktrace(defaultCallerSkip, 1),
+		frames: frames,
 	}
 }
 
@@ -42,9 +48,9 @@ func Unwrap(err error) error {
 // UnwrapAll recursively traverses the wrapped errors and returns the innermost non-wrapped error.
 // If the input error (err) is not a wrapped error, it is returned unchanged.
 func UnwrapAll(err error) error {
-	u, ok := err.(UnwrapErr) //nolint:errorlint // unwrap
-	if ok {
-		return UnwrapAll(u.Unwrap())
+	var wErr UnwrapErr
+	if errors.As(err, &wErr) {
+		return UnwrapAll(wErr.Unwrap())
 	}
 
 	return err

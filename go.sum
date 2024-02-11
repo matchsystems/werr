@@ -1,13 +1,11 @@
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
+github.com/matchsystems/stacktrace v0.0.0-20240211125017-574c181c27b5 h1:3tqfQB6yoTTW1DBq+80dLyhMxix723IfvWS1fUjH2Bo=
+github.com/matchsystems/stacktrace v0.0.0-20240211125017-574c181c27b5/go.mod h1:9zCxVYxT8/7J2qzExl9HE0dP0lgtqPU7UUhB/jlvdYU=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/stretchr/testify v1.8.4 h1:CcVxjf3Q8PM0mHUKJCdn+eZZtm5yQwehR5yeSVQQcUk=
 github.com/stretchr/testify v1.8.4/go.mod h1:sz/lmYIOXD/1dqDmKjjqLyZ2RngseejIcXlSw2iwfAo=
-gitlab.com/matchsystems-golang/stacktrace v0.0.0-20240211113023-0114a8306c35 h1:gPEAT7wJpJIi1gJOFZcg/aBbpdj3ke2V7GGHJE3kOto=
-gitlab.com/matchsystems-golang/stacktrace v0.0.0-20240211113023-0114a8306c35/go.mod h1:Hs21vlHV0+9NTk+eKVOUg7u+UpnpgiIQ6F56NEhpcJA=
-gitlab.com/matchsystems-golang/stacktrace v0.0.0-20240211114504-51953216813b h1:3mDgFobY8BxR5kGvzgN+C8+VPVy7Kw9ugWNlFI1L3fk=
-gitlab.com/matchsystems-golang/stacktrace v0.0.0-20240211114504-51953216813b/go.mod h1:Hs21vlHV0+9NTk+eKVOUg7u+UpnpgiIQ6F56NEhpcJA=
 gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405 h1:yhCVgyC4o1eVCa2tZl7eS0r+SDo693bJlVdllGtEeKM=
 gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
 gopkg.in/yaml.v3 v3.0.1 h1:fxVm/GzAzEWqLHuvctI91KS9hhNmmWOoWu0XTYJS7CA=

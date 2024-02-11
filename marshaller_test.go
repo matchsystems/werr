@@ -6,8 +6,8 @@ import (
 	"runtime"
 	"testing"
 
+	"github.com/matchsystems/stacktrace"
 	"github.com/stretchr/testify/require"
-	"gitlab.com/matchsystems-golang/stacktrace"
 
 	"github.com/matchsystems/werr"
 )
@@ -19,6 +19,7 @@ func callerErr() error {
 func caller() []uintptr {
 	pcs := make([]uintptr, 10)
 	runtime.Callers(0, pcs)
+
 	return pcs
 }
 
@@ -41,8 +42,8 @@ func TestDefaultErrorStackMarshaler(t *testing.T) {
 		require.Equal(t, `hello
 test
 werr/marshaller_test.go:21#caller
-werr/marshaller_test.go:26#nested
-werr/marshaller_test.go:35#TestDefaultErrorStackMarshaler.func1`, callersFrames)
+werr/marshaller_test.go:27#nested
+werr/marshaller_test.go:36#TestDefaultErrorStackMarshaler.func1`, callersFrames)
 	})
 
 	t.Run("pretty print", func(t *testing.T) {
@@ -57,7 +58,7 @@ werr/marshaller_test.go:35#TestDefaultErrorStackMarshaler.func1`, callersFrames)
 		require.Equal(t, `hello
 test
 werr/marshaller_test.go:21#caller
-werr/marshaller_test.go:51#TestDefaultErrorStackMarshaler.func2`, callersFrames)
+werr/marshaller_test.go:52#TestDefaultErrorStackMarshaler.func2`, callersFrames)
 	})
 
 	t.Run("error", func(t *testing.T) {

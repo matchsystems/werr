@@ -3,7 +3,7 @@ package werr
 import (
 	"strings"
 
-	"gitlab.com/matchsystems-golang/stacktrace"
+	"github.com/matchsystems/stacktrace"
 )
 
 //nolint:gochecknoglobals // for custom setting
@@ -21,7 +21,7 @@ func DefaultErrorStackMarshaler(err error, msg string, frames stacktrace.Frames)
 		result = msg + "\n"
 	}
 
-	result = result + err.Error()
+	result += Unwrap(err).Error()
 
 	if len(frames) > 0 {
 		result = result + "\n" + strings.Join(frames.Pretty(), "\n")

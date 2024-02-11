@@ -29,8 +29,8 @@ werr/error_test.go:20#TestWrapError_Error.func1`, wrappedErr.Error())
 		wrappedErr := Wrapf(subWrappedErr, "additional message")
 		require.Equal(t, `additional message
 original error
-werr/error_test.go:28#TestWrapError_Error.func2
-werr/error_test.go:29#TestWrapError_Error.func2`, wrappedErr.Error())
+werr/error_test.go:29#TestWrapError_Error.func2
+werr/error_test.go:28#TestWrapError_Error.func2`, wrappedErr.Error())
 	})
 
 	t.Run("without message", func(t *testing.T) {
@@ -68,14 +68,9 @@ func TestUnwrap(t *testing.T) {
 	t.Run("nested trace", func(t *testing.T) {
 		t.Parallel()
 		err := nestedErr()
-		//github.com/matchsystems/werr/error_test.go:13
-		//nestedErr()
-		//github.com/matchsystems/werr/error_test.go:12
-		//nestedSecondErr()
-		//example nested error
 		require.Equal(t, `example nested error
-werr/error_test.go:12#nestedSecondErr
-werr/error_test.go:13#nestedErr`, err.Error())
+werr/error_test.go:13#nestedErr
+werr/error_test.go:12#nestedSecondErr`, err.Error())
 	})
 
 	t.Run("when nil", func(t *testing.T) {
