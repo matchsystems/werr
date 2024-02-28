@@ -24,7 +24,7 @@ func DefaultErrorStackMarshaler(err error, msg string, frames stacktrace.Frames)
 	result += Unwrap(err).Error()
 
 	if len(frames) > 0 {
-		result = result + "\n" + strings.Join(frames.Pretty(), "\n")
+		result += "\n" + strings.Join(frames.Pretty(), "\n")
 	}
 
 	return result
