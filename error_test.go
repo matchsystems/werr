@@ -15,50 +15,28 @@ func nestedErr() error       { return Wrap(nestedSecondErr()) }
 func TestWrapError_Error(t *testing.T) {
 	t.Parallel()
 
-	err := errors.New("original error")
-
 	t.Run("with message", func(t *testing.T) {
 		t.Parallel()
-		wrappedErr := wrapError{
-			caller:   "caller",
-			err:      err,
-			funcName: "function",
-			msg:      "additional message",
-		}
-
-		expected := "caller\tfunction\tadditional message\noriginal error"
-		require.Equal(t, expected, wrappedErr.Error())
+		wrappedErr := Wrapf(errors.New("original error"), "additional message")
+		require.Equal(t, `additional message
+original error
+werr/error_test.go:20#TestWrapError_Error.func1`, wrappedErr.Error())
 	})
 
 	t.Run("when wrap chain", func(t *testing.T) {
 		t.Parallel()
-		subWrappedErr := wrapError{
-			caller:   "subCaller",
-			err:      err,
-			funcName: "subFunction",
-			msg:      "",
-		}
-		wrappedErr := wrapError{
-			caller:   "caller",
-			err:      subWrappedErr,
-			funcName: "function",
-			msg:      "additional message",
-		}
-
-		expected := "caller\tfunction\tadditional message\nsubCaller\tsubFunction\noriginal error"
-		require.Equal(t, expected, wrappedErr.Error())
+		subWrappedErr := Wrap(errors.New("original error"))
+		wrappedErr := Wrapf(subWrappedErr, "additional message")
+		require.Equal(t, `additional message
+original error
+werr/error_test.go:29#TestWrapError_Error.func2
+werr/error_test.go:28#TestWrapError_Error.func2`, wrappedErr.Error())
 	})
 
 	t.Run("without message", func(t *testing.T) {
 		t.Parallel()
-		wrappedErr := wrapError{
-			caller:   "caller",
-			err:      err,
-			funcName: "function",
-		}
-
-		expected := "caller\tfunction\noriginal error"
-		require.Equal(t, expected, wrappedErr.Error())
+		wrappedErr := wrapError{err: errors.New("original error")}
+		require.Equal(t, `original error`, wrappedErr.Error())
 	})
 }
 
@@ -89,8 +67,10 @@ func TestUnwrap(t *testing.T) {
 
 	t.Run("nested trace", func(t *testing.T) {
 		t.Parallel()
-
-		require.Equal(t, "github.com/matchsystems/werr/error_test.go:13\tnestedErr()\ngithub.com/matchsystems/werr/error_test.go:12\tnestedSecondErr()\nexample nested error", nestedErr().Error()) //nolint: lll // test
+		err := nestedErr()
+		require.Equal(t, `example nested error
+werr/error_test.go:13#nestedErr
+werr/error_test.go:12#nestedSecondErr`, err.Error())
 	})
 
 	t.Run("when nil", func(t *testing.T) {

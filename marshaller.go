@@ -1,17 +1,31 @@
 package werr
 
+import (
+	"strings"
+
+	"github.com/matchsystems/stacktrace"
+)
+
 //nolint:gochecknoglobals // for custom setting
 var (
 	// ErrorStackMarshaler extract the stack from err.
 	ErrorStackMarshaler ErrorStackMarshalerFn = DefaultErrorStackMarshaler
 )
 
-type ErrorStackMarshalerFn func(caller string, err error, funcName, msg string) string
+type ErrorStackMarshalerFn func(err error, msg string, frames stacktrace.Frames) string
 
-func DefaultErrorStackMarshaler(caller string, err error, funcName, msg string) string {
-	if msg != "" {
-		msg = "\t" + msg
+func DefaultErrorStackMarshaler(err error, msg string, frames stacktrace.Frames) string {
+	var result string
+
+	if len(msg) > 0 {
+		result = msg + "\n"
 	}
 
-	return caller + "\t" + funcName + msg + "\n" + err.Error()
+	result += Unwrap(err).Error()
+
+	if len(frames) > 0 {
+		result += "\n" + strings.Join(frames.Pretty(), "\n")
+	}
+
+	return result
 }
