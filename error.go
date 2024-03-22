@@ -37,33 +37,14 @@ func Message(err error) string {
 	return ""
 }
 
-// UnwrapMessageFunc recursively walks through wrapped errors and returns messages.
-// If the input error (err) is not a wrapped error, it is returned empty string.
-// Example:
-//
-//  1. returns latest message:
-//
-//     UnwrapMessageFunc(err, func(msg string) bool) {
-//     return true
-//     }
-//
-//  2. returns latest not empty message:
-//
-//     UnwrapMessageFunc(err, func(msg string) bool) {
-//     return len(msg) != 0
-//     }
-func UnwrapMessageFunc(err error, fn func(msg string) bool) string {
-	var msg string
-
+// UnwrapFunc recursively walks through wrapped errors and call fn() arg.
+// If the input error (err) is not a wrapped error, it is returned unchanged.
+func UnwrapFunc(err error, fn func(err error)) {
 	var wErr wrapError
 	for errors.As(err, &wErr) {
-		if fn(Message(err)) {
-			msg = Message(err)
-		}
+		fn(wErr)
 		err = wErr.Unwrap()
 	}
-
-	return msg
 }
 
 // Unwrap recursively traverses the wrapped errors and returns the innermost non-wrapped error.

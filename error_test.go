@@ -139,7 +139,7 @@ func TestMessage(t *testing.T) {
 	})
 }
 
-func TestUnwrapMessageFunc(t *testing.T) {
+func TestUnwrapFunc(t *testing.T) {
 	t.Parallel()
 
 	err := errors.New("foo")
@@ -153,13 +153,11 @@ func TestUnwrapMessageFunc(t *testing.T) {
 		wErr2Msg := "baz"
 		wErr2 := Wrapf(wErr1, wErr2Msg)
 
-		msg := UnwrapMessageFunc(wErr1, func(_ string) bool {
-			return true
-		})
-		require.Equal(t, wErr1Msg, msg)
-
-		msg = UnwrapMessageFunc(wErr2, func(_ string) bool {
-			return true
+		var msg string
+		UnwrapFunc(wErr2, func(err error) {
+			if len(Message(err)) != 0 {
+				msg = Message(err)
+			}
 		})
 		require.Equal(t, wErr1Msg, msg)
 	})
@@ -172,13 +170,9 @@ func TestUnwrapMessageFunc(t *testing.T) {
 		wErr2Msg := "baz"
 		wErr2 := Wrapf(wErr1, wErr2Msg)
 
-		msg := UnwrapMessageFunc(wErr1, func(_ string) bool {
-			return true
-		})
-		require.Empty(t, msg)
-
-		msg = UnwrapMessageFunc(wErr2, func(_ string) bool {
-			return true
+		var msg string
+		UnwrapFunc(wErr2, func(err error) {
+			msg = Message(err)
 		})
 		require.Empty(t, msg)
 	})
@@ -191,13 +185,18 @@ func TestUnwrapMessageFunc(t *testing.T) {
 		wErr2Msg := "baz"
 		wErr2 := Wrapf(wErr1, wErr2Msg)
 
-		msg := UnwrapMessageFunc(wErr1, func(msg string) bool {
-			return len(msg) != 0
+		var msg string
+		UnwrapFunc(wErr1, func(err error) {
+			if len(Message(err)) != 0 {
+				msg = Message(err)
+			}
 		})
 		require.Empty(t, msg)
 
-		msg = UnwrapMessageFunc(wErr2, func(msg string) bool {
-			return len(msg) != 0
+		UnwrapFunc(wErr2, func(err error) {
+			if len(Message(err)) != 0 {
+				msg = Message(err)
+			}
 		})
 		require.Equal(t, wErr2Msg, msg)
 	})
