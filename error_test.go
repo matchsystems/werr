@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func nestedThirdErr() error  { return fmt.Errorf("example nested error") }
+func nestedThirdErr() error  { return errors.New("example nested error") }
 func nestedSecondErr() error { return Wrap(nestedThirdErr()) }
 func nestedErr() error       { return Wrap(nestedSecondErr()) }
 
@@ -102,5 +102,103 @@ func TestUnwrap(t *testing.T) {
 		t.Parallel()
 		errWithoutUnwrap := errors.New("error without Unwrap")
 		require.ErrorIs(t, Unwrap(errWithoutUnwrap), errWithoutUnwrap)
+	})
+}
+
+func TestMessage(t *testing.T) {
+	t.Parallel()
+
+	err := errors.New("foo")
+
+	wErr1Msg := "bar"
+	wErr1 := Wrapf(err, wErr1Msg)
+
+	wErr2Msg := "baz"
+	wErr2 := Wrapf(wErr1, wErr2Msg)
+
+	wErr3 := Wrap(wErr1)
+
+	t.Run("default", func(t *testing.T) {
+		t.Parallel()
+
+		msg := Message(err)
+		require.Empty(t, msg)
+
+		msg = Message(wErr1)
+		require.Equal(t, wErr1Msg, msg)
+
+		msg = Message(wErr2)
+		require.Equal(t, wErr2Msg, msg)
+	})
+
+	t.Run("without message", func(t *testing.T) {
+		t.Parallel()
+
+		msg := Message(wErr3)
+		require.Empty(t, msg)
+	})
+}
+
+func TestUnwrapMessageFunc(t *testing.T) {
+	t.Parallel()
+
+	err := errors.New("foo")
+
+	t.Run("latest with message", func(t *testing.T) {
+		t.Parallel()
+
+		wErr1Msg := "bar"
+		wErr1 := Wrapf(err, wErr1Msg)
+
+		wErr2Msg := "baz"
+		wErr2 := Wrapf(wErr1, wErr2Msg)
+
+		msg := UnwrapMessageFunc(wErr1, func(_ string) bool {
+			return true
+		})
+		require.Equal(t, wErr1Msg, msg)
+
+		msg = UnwrapMessageFunc(wErr2, func(_ string) bool {
+			return true
+		})
+		require.Equal(t, wErr1Msg, msg)
+	})
+
+	t.Run("latest without message", func(t *testing.T) {
+		t.Parallel()
+
+		wErr1 := Wrap(err)
+
+		wErr2Msg := "baz"
+		wErr2 := Wrapf(wErr1, wErr2Msg)
+
+		msg := UnwrapMessageFunc(wErr1, func(_ string) bool {
+			return true
+		})
+		require.Empty(t, msg)
+
+		msg = UnwrapMessageFunc(wErr2, func(_ string) bool {
+			return true
+		})
+		require.Empty(t, msg)
+	})
+
+	t.Run("latest not empty message", func(t *testing.T) {
+		t.Parallel()
+
+		wErr1 := Wrap(err)
+
+		wErr2Msg := "baz"
+		wErr2 := Wrapf(wErr1, wErr2Msg)
+
+		msg := UnwrapMessageFunc(wErr1, func(msg string) bool {
+			return len(msg) != 0
+		})
+		require.Empty(t, msg)
+
+		msg = UnwrapMessageFunc(wErr2, func(msg string) bool {
+			return len(msg) != 0
+		})
+		require.Equal(t, wErr2Msg, msg)
 	})
 }

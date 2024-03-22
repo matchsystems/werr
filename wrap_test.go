@@ -16,10 +16,10 @@ func TestWrap(t *testing.T) {
 		wrappedErr := Wrap(originalErr)
 
 		// Ensure that the wrapped error is of type error
-		require.IsType(t, wrappedErr, wrapError{})
+		require.IsType(t, wrapError{}, wrappedErr)
 
 		// Ensure that the wrapped error contains the original error
-		require.ErrorIs(t, wrappedErr, originalErr)
+		require.ErrorIs(t, originalErr, wrappedErr)
 	})
 
 	t.Run("when nil", func(t *testing.T) {
@@ -47,7 +47,7 @@ func TestWrapf(t *testing.T) {
 		wrappedErr := Wrapf(originalErr, "additional message: %s", "some details")
 
 		// Ensure that the wrapped error is of type *wrapError
-		require.IsType(t, wrappedErr, wrapError{})
+		require.IsType(t, wrapError{}, wrappedErr)
 
 		// Ensure that the wrapped error contains the original error
 		require.ErrorIs(t, wrappedErr, originalErr)
